@@ -5,7 +5,20 @@ session_start();
 include("./admin/includes/db.php");
 include("./admin/functions/functions.php");
 
+if (isset($_POST['add_to_cart'])) {
 
+    $product_id = $_POST['product_id'];
+    $product_quantity = 1;
+  
+    $select_cart = mysqli_query($db, "SELECT * FROM `cart` WHERE name = '$product_id'");
+  
+    if ($select_cart==true and mysqli_num_rows($select_cart) > 0) {
+      $message[] = 'product already added to cart';
+    } else {
+      $insert_product = mysqli_query($db, "INSERT INTO `cart`(p_id, qty) VALUES('$product_id','$product_quantity')");
+      $message[] = 'product added to cart succesfully';
+    }
+  }
 
 ?>
 
@@ -100,7 +113,7 @@ include("./admin/functions/functions.php");
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="text-center">
+                                <!-- <tr class="text-center">
                                     <td class="product-remove"><a href="cart.html#"><span class="ion-ios-close"></span></a></td>
                                     <td class="image-prod">
                                         <div class="img" style="background-image:url(images/xproduct-3.jpg.pagespeed.ic.c75YZ2rFDh.jpg)">
@@ -117,8 +130,8 @@ include("./admin/functions/functions.php");
                                         </div>
                                     </td>
                                     <td class="total">$4.90</td>
-                                </tr>
-                                <tr class="text-center">
+                                </tr> -->
+                                <!-- <tr class="text-center">
                                     <td class="product-remove"><a href="cart.html#"><span class="ion-ios-close"></span></a></td>
                                     <td class="image-prod">
                                         <div class="img" style="background-image:url(images/xproduct-4.jpg.pagespeed.ic.UHkUnCwhwn.jpg)">
@@ -135,7 +148,10 @@ include("./admin/functions/functions.php");
                                         </div>
                                     </td>
                                     <td class="total">$15.70</td>
-                                </tr>
+                                </tr> -->
+                                <?php
+                                getCart();
+                                ?>
                             </tbody>
                         </table>
                     </div>

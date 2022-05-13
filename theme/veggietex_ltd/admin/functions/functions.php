@@ -165,9 +165,12 @@ function getPro()
               <div class='bottom-area d-flex px-3'>
                 <div class='bottom-area d-flex px-3'>
                   <div class='m-auto d-flex'>
-                    <a href='index.html#' class='add-to-cart d-flex justify-content-center align-items-center text-center'>
-                      <span><i class='fa fa-shopping-cart'></i></span>
-                    </a>
+                  <form method='post' action='cart.php'>
+                  <input type='hidden' value='$pro_id' name='product_id'>
+                    <input type='submit' class='add-to-cart d-flex justify-content-center align-items-center text-center' name='add_to_cart' value='Add to Cart'>
+                      <span><i class='fa fa-shopping-cart' ></i></span>
+                    </input>
+                    </form>
               
                   </div>
                 </div>
@@ -482,3 +485,65 @@ function getPaginator()
 }
 
 /// getPaginator Function Ends ///
+
+function getCart()
+{
+  global $db;
+  $select_cart = "select * from cart;";
+
+  $run_cart = mysqli_query($db, $select_cart);
+
+  $count = mysqli_num_rows($run_cart);
+
+
+  $total = 0;
+
+  while ($row_cart = mysqli_fetch_array($run_cart)) {
+
+    $pro_id = $row_cart['p_id'];
+
+    $pro_size = $row_cart['size'];
+
+    $pro_qty = $row_cart['qty'];
+
+    $only_price = $row_cart['p_price'];
+
+    $get_products = "select * from products where product_id='$pro_id'";
+
+    $run_products = mysqli_query($db, $get_products);
+
+    while ($row_products = mysqli_fetch_array($run_products)) {
+      $product_img1 = $row_products['product_img1'];
+      $product_title = $row_products['product_title'];
+      $product_price = $row_products['product_price'];
+      $sub_total = $product_price *$pro_qty;
+
+      echo "
+      
+      <tr class='text-center'>
+      <td class='product-remove'><a href='cart.html#'><span
+            class='ion-ios-close'></span></a></td>
+      <td class='image-prod'>
+        <div class='img'
+          style='background-image:url($product_img1)'>
+        </div>
+      </td>
+      <td class='product-name'>
+        <h3>$product_title</h3>
+      </td>
+      <td class='price'>$$product_price</td>
+      <td class='quantity'>
+        <div class='input-group mb-3'>
+          <input type='text' name='quantity'
+            class='quantity form-control input-number' value='$pro_qty' min='1' max='100'>
+        </div>
+      </td>
+      <td class='total'>$ $sub_total</td>
+
+
+
+    </tr>
+      ";
+    }
+  }
+}

@@ -11,20 +11,7 @@ include("./admin/functions/functions.php");
 
 @include 'config.php';
 
-if (isset($_POST['add_to_cart'])) {
 
-  $product_id = $_POST['product_id'];
-  $product_quantity = 1;
-
-  $select_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_id'");
-
-  if (mysqli_num_rows($select_cart) > 0) {
-    $message[] = 'product already added to cart';
-  } else {
-    $insert_product = mysqli_query($conn, "INSERT INTO `cart`(p_id, qty) VALUES('$product_id','$product_quantity')");
-    $message[] = 'product added to cart succesfully';
-  }
-}
 
 ?>
 
@@ -107,12 +94,12 @@ if (isset($_POST['add_to_cart'])) {
               <a class="dropdown-item" href="shop.html">Shop</a>
               <a class="dropdown-item" href="wishlist.html">Wishlist</a>
               <a class="dropdown-item" href="product-single.html">Single Product</a>
-              <a class="dropdown-item" href="cart.html">Cart</a>
+              <a class="dropdown-item" href="cart.php">Cart</a>
               <a class="dropdown-item" href="checkout.html">Checkout</a>
             </div>
           </li>
           <li class="nav-item cta cta-colored">
-            <a href="cart.html" class="nav-link"><span class="fa fa-shopping-cart"></span>[0]</a>
+            <a href="cart.php" class="nav-link"><span class="fa fa-shopping-cart"></span>[0]</a>
           </li>
         </ul>
       </div>
@@ -1053,6 +1040,7 @@ if (isset($_POST['add_to_cart'])) {
       eval(mod_pagespeed_Tc1bSe$T9c);
     </script>
     <script src="js/main.js"></script>
+    <script src="js/add_cart.js"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
     <script>
