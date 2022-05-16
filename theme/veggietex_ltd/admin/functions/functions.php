@@ -501,6 +501,7 @@ function getCart()
   while ($row_cart = mysqli_fetch_array($run_cart)) {
 
     $pro_id = $row_cart['p_id'];
+    $cart_id = $row_cart['ID'];
 
     $pro_size = $row_cart['size'];
 
@@ -516,13 +517,17 @@ function getCart()
       $product_img1 = $row_products['product_img1'];
       $product_title = $row_products['product_title'];
       $product_price = $row_products['product_price'];
-      $sub_total = $product_price *$pro_qty;
+      $sub_total = $product_price * $pro_qty;
 
       echo "
       
       <tr class='text-center'>
-      <td class='product-remove'><a href='cart.html#'><span
-            class='ion-ios-close'></span></a></td>
+      <td class='product-remove'>
+      <form method='post' action='cart.php'>
+      <input type='hidden' value='$pro_id' name='product_id'>
+      <button type='submit' name='delete_to_cart' class='ion-ios-close'>
+    </form>
+            </td>
       <td class='image-prod'>
         <div class='img'
           style='background-image:url($product_img1)'>
@@ -534,6 +539,7 @@ function getCart()
       <td class='price'>$$product_price</td>
       <td class='quantity'>
         <div class='input-group mb-3'>
+        <input type = 'hidden' value='$cart_id' name='cart_id'>
           <input type='text' name='quantity'
             class='quantity form-control input-number' value='$pro_qty' min='1' max='100'>
         </div>

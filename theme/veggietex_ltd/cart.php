@@ -1,7 +1,7 @@
 <?php
-
+ini_set('session.cache_limiter','public');
+session_cache_limiter(false);
 session_start();
-
 include("./admin/includes/db.php");
 include("./admin/functions/functions.php");
 
@@ -9,16 +9,26 @@ if (isset($_POST['add_to_cart'])) {
 
     $product_id = $_POST['product_id'];
     $product_quantity = 1;
-  
-    $select_cart = mysqli_query($db, "SELECT * FROM `cart` WHERE name = '$product_id'");
-  
-    if ($select_cart==true and mysqli_num_rows($select_cart) > 0) {
-      $message[] = 'product already added to cart';
+
+    $select_cart = mysqli_query($con, "SELECT * FROM `cart` WHERE p_id = '$product_id'");
+
+    if ($select_cart == true and mysqli_num_rows($select_cart) > 0) {
+        $message[] = 'product already added to cart';
     } else {
-      $insert_product = mysqli_query($db, "INSERT INTO `cart`(p_id, qty) VALUES('$product_id','$product_quantity')");
-      $message[] = 'product added to cart succesfully';
+        $insert_product = mysqli_query($con, "INSERT INTO `cart`(p_id, qty) VALUES('$product_id','$product_quantity')");
+        $message[] = 'product added to cart succesfully';
     }
-  }
+}
+
+if (isset($_POST['delete_to_cart'])) {
+    $product_id = $_POST['product_id'];
+    $delete_cart = mysqli_query($db, "DELETE FROM cart WHERE p_id = $product_id");
+
+    if ($delete_cart == true) {
+        $message[] = 'Product deleted from cart';
+    }
+}
+
 
 ?>
 
@@ -113,42 +123,7 @@ if (isset($_POST['add_to_cart'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <tr class="text-center">
-                                    <td class="product-remove"><a href="cart.html#"><span class="ion-ios-close"></span></a></td>
-                                    <td class="image-prod">
-                                        <div class="img" style="background-image:url(images/xproduct-3.jpg.pagespeed.ic.c75YZ2rFDh.jpg)">
-                                        </div>
-                                    </td>
-                                    <td class="product-name">
-                                        <h3>Bell Pepper</h3>
-                                        <p>Far far away, behind the word mountains, far from the countries</p>
-                                    </td>
-                                    <td class="price">$4.90</td>
-                                    <td class="quantity">
-                                        <div class="input-group mb-3">
-                                            <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-                                        </div>
-                                    </td>
-                                    <td class="total">$4.90</td>
-                                </tr> -->
-                                <!-- <tr class="text-center">
-                                    <td class="product-remove"><a href="cart.html#"><span class="ion-ios-close"></span></a></td>
-                                    <td class="image-prod">
-                                        <div class="img" style="background-image:url(images/xproduct-4.jpg.pagespeed.ic.UHkUnCwhwn.jpg)">
-                                        </div>
-                                    </td>
-                                    <td class="product-name">
-                                        <h3>Bell Pepper</h3>
-                                        <p>Far far away, behind the word mountains, far from the countries</p>
-                                    </td>
-                                    <td class="price">$15.70</td>
-                                    <td class="quantity">
-                                        <div class="input-group mb-3">
-                                            <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-                                        </div>
-                                    </td>
-                                    <td class="total">$15.70</td>
-                                </tr> -->
+                            
                                 <?php
                                 getCart();
                                 ?>
@@ -199,18 +174,10 @@ if (isset($_POST['add_to_cart'])) {
                             <span>Subtotal</span>
                             <span id="subtotal-price">0</span>
                         </p>
-                        <p class="d-flex">
-                            <span>Delivery</span>
-                            <span>$0.00</span>
-                        </p>
-                        <p class="d-flex">
-                            <span>Discount</span>
-                            <span>$3.00</span>
-                        </p>
                         <hr>
                         <p class="d-flex total-price">
                             <span>Total</span>
-                            <span>$17.60</span>
+                            <span id='total-price'>0</span>
                         </p>
                     </div>
                     <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
