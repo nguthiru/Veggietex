@@ -109,7 +109,7 @@ if ($email != false && $password != false) {
                         </div>
                     </li>
                     <li class="nav-item cta cta-colored">
-                        <a href="cart.html" class="nav-link"><span class="fa fa-shopping-cart"></span>[0]</a>
+                        <a href="cart.html" class="nav-link"><span class="fa fa-shopping-cart"></span></a>
                     </li>
                 </ul>
             </div>
