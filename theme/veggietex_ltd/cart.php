@@ -23,13 +23,13 @@ if (isset($_POST['add_to_cart'])) {
 
     $product_id = $_POST['product_id'];
     $product_quantity = 1;
-    print_r($product_id);
     $select_cart = mysqli_query($con, "SELECT * FROM `cart` WHERE p_id = '$product_id' AND client='$user_id'");
 
     if ($select_cart == true and mysqli_num_rows($select_cart) > 0) {
         $message[] = 'product already added to cart';
     } else {
-        $insert_product = mysqli_query($con, "INSERT INTO `cart`(p_id, qty,client) VALUES('$product_id','$product_quantity',$user_id)");
+        $insert_product = mysqli_query($con, "INSERT INTO `cart`(p_id, qty,client,ordered) VALUES('$product_id','$product_quantity',$user_id,0)");
+        echo mysqli_error($con);
         $message[] = 'product added to cart succesfully';
     }
 }

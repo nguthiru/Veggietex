@@ -26,7 +26,7 @@ if (isset($_POST)) {
         
         $update_query = mysqli_query($con,"UPDATE cart SET ordered=1 WHERE ID=$id;");
     }
-    if ($success) {
+    if (mysqli_error($con)!='') {
         $sent_mail = mail("nguthiruedwin@gmail.com", "New Order ", "
     A new order has been placed by $fname $lname ,you can contact them at $email or at $phone
     ");
@@ -43,7 +43,7 @@ if (isset($_POST)) {
             echo "
         <script>
         alert('An error has occured try again');
-        history.back();
+    
         </script>
         ";
         }

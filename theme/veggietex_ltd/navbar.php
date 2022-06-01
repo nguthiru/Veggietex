@@ -1,25 +1,27 @@
-<?php require_once "controllerClientData.php"; ?>
 <?php
-$email = $_SESSION['email'];
-// $password = $_SESSION['password'];
-if ($email != false) {
-    $sql = "SELECT * FROM clienttable WHERE email = '$email'";
-    $run_Sql = mysqli_query($con, $sql);
-    if ($run_Sql) {
-        $fetch_info = mysqli_fetch_assoc($run_Sql);
-        $status = $fetch_info['status'];
-        $code = $fetch_info['code'];
-        if ($status == "verified") {
-            if ($code != 0) {
-                header('Location: clientresetcode.php');
+
+require_once("controllerClientData.php");
+if (isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
+    // $password = $_SESSION['password'];
+    if ($email != false) {
+        $sql = "SELECT * FROM clienttable WHERE email = '$email'";
+        $run_Sql = mysqli_query($con, $sql);
+        if ($run_Sql) {
+            $fetch_info = mysqli_fetch_assoc($run_Sql);
+            $status = $fetch_info['status'];
+            $code = $fetch_info['code'];
+            if ($status == "verified") {
+                if ($code != 0) {
+                    header('Location: clientresetcode.php');
+                }
+            } else {
+                header('Location: client-otp.php');
             }
-        } else {
-            header('Location: client-otp.php');
         }
+    } else {
+        header('Location: clientlogin.php');
     }
-} 
-else {
-    // header('Location: clientlogin.php');
 }
 ?>
 <div class="py-1 bg-primary">
@@ -72,14 +74,38 @@ else {
                 <li class="nav-item">
                     <a href="contact.html" class="nav-link">Contact</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Welcome <?php echo $fetch_info['name'] ?> <span class="fa fa-user"></span></a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown04">
-                        <a class="dropdown-item" href="clientforgotpassword.php">Reset Password</a>
-                        <a class="dropdown-item" href="clientlogout.php">logout</a>
+
+                <?php
+                if (isset($_SESSION['email'])) {
+                    $userName = $fetch_info['name'];
+                    echo "
+                    <li class='nav-item dropdown'>
+                    <a class='nav-link dropdown-toggle' href='' id='dropdown04' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Welcome $userName<span class='fa fa-user'></span></a>
+
+                
+                   
+                    <div class='dropdown-menu' aria-labelledby='dropdown04'>
+                        <a class='dropdown-item' href='clientforgotpassword.php'>Reset Password</a>
+                        <a class='dropdown-item' href='clientlogout.php'>logout</a>
 
                     </div>
-                </li>
+                    </li>
+                ";
+                } else {
+                    echo '
+                    <li class="nav-item">
+                        <a href="clientsignup.php" class="nav-link"><span class="fa fa-user"></span> Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="clientlogin.php" class="nav-link"><span class="fa fa-sign-in"></span> Login</a>
+                    </li>
+                    ';
+                }
+                ?>
+
+
+
+
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="index.html#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
