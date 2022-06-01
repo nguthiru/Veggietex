@@ -1,6 +1,3 @@
 <?php
-$con = mysqli_connect('localhost', 'root', '', 'veggietexproject');
+$con = mysqli_connect('localhost', 'root', '', 'ecom_store');
 ?>
-
-
-.

@@ -489,7 +489,19 @@ function getPaginator()
 function getCart()
 {
   global $db;
-  $select_cart = "select * from cart;";
+
+  if(!isset($_SESSION['user_id'])){
+    echo "
+      <script>
+        location.replace('/Veggietex/theme/veggietex_ltd/clientlogin.php');
+      </script>
+    
+    ";
+  }
+
+  $user_id = $_SESSION['user_id'];
+
+  $select_cart = "select * from cart WHERE client=$user_id AND ordered=0;";
 
   $run_cart = mysqli_query($db, $select_cart);
 
@@ -503,11 +515,9 @@ function getCart()
     $pro_id = $row_cart['p_id'];
     $cart_id = $row_cart['ID'];
 
-    $pro_size = $row_cart['size'];
 
     $pro_qty = $row_cart['qty'];
 
-    $only_price = $row_cart['p_price'];
 
     $get_products = "select * from products where product_id='$pro_id'";
 

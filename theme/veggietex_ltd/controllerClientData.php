@@ -1,5 +1,9 @@
 <?php
-session_start();
+
+if(!isset($_SESSION)){
+    session_start();
+
+}
 require "veggietexconnection.php";
 $email = "";
 $name = "";
@@ -30,12 +34,11 @@ if (isset($_POST['signup'])) {
                         values('$name', '$email', '$encpass', '$code', '$status')";
         $data_check = mysqli_query($con, $insert_data);
         $last_id = mysqli_insert_id($con);
-        echo "ID= " . $last_id;
         if ($data_check) {
 
             $subject = "Veggietex Ltd Sign Up Verification Code";
             $message = "Your verification code is $code";
-            $sender = "From: keithnathy@gmail.com";
+            $sender = "From: nguthiruedwin@gmail.com";
             if (mail($email, $subject, $message, $sender)) {
                 $info = "We have sent a verification code to your email - $email";
                 $_SESSION['info'] = $info;
@@ -50,7 +53,7 @@ if (isset($_POST['signup'])) {
                 $errors['otp-error'] = "Failed while sending code!";
             }
         } else {
-            $errors['db-error'] = "Failed while inserting data into database!";
+            $errors['db-error'] = mysqli_error($con);
         }
     }
 }
@@ -73,7 +76,7 @@ if (isset($_POST['check'])) {
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
 
-            header('location: clientwelcome.php');
+            header('location: index.php');
             exit();
         } else {
             $errors['otp-error'] = "Failed while updating code!";
@@ -92,7 +95,7 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($res) > 0) {
         $fetch = mysqli_fetch_assoc($res);
         $fetch_pass = $fetch['password'];
-        $fetch_id = $fetch['id'];
+        $fetch_id = $fetch['user_id'];
         $name =  $fetch['name'];
         if (password_verify($password, $fetch_pass)) {
             // if
@@ -100,15 +103,14 @@ if (isset($_POST['login'])) {
             $status = $fetch['status'];
             if ($status == 'verified') {
                 $_SESSION['email'] = $email;
-                $_SESSION['password'] = $password;
+                // $_SESSION['password'] = $password;
                 $_SESSION['user_id'] = $fetch_id;
                 $_SESSION['username'] = $name;
                 // If null, it is 
                 if (($fetch['clientaccountstatus']) !== "Deactivated") {
-                    header('location: clientwelcome.php');
+                    header('location: index.php');
                 } else {
                     header('location: clientaccountnotactive.php');
-                    // echo "Not verified";
                     exit();
                 }
             } else {
@@ -139,7 +141,7 @@ if (isset($_POST['check-email'])) {
         if ($run_query) {
             $subject = "Veggietex Ltd Client Password Reset Code";
             $message = "Your password reset code is $code";
-            $sender = "From: keithnathy@gmail.com";
+            $sender = "From: nguthiruedwin@gmail.com";
             if (mail($email, $subject, $message, $sender)) {
                 $info = "We have sent a password reset otp to your email - $email";
                 //$info = "WE ' VE SENT A PASSWORD RESET OTP TO YOUR EMAIL - $email";
